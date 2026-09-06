@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Log In · AI Decision Maker</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+<div class="auth-shell">
+  <div class="auth-card">
+    <div class="brand-mark">
+      <div class="brand-dot"></div>
+      <span>AI DECISION MAKER</span>
+    </div>
+
+    <h1>Welcome back</h1>
+    <p class="auth-sub">Log in to analyze your data and get a decision.</p>
+
+    <div id="formMsg" class="form-message"></div>
+
+    <form id="loginForm">
+      <div class="field">
+        <label for="email">Email</label>
+        <input type="email" id="email" required autocomplete="email" placeholder="you@company.com">
+      </div>
+      <div class="field">
+        <label for="password">Password</label>
+        <input type="password" id="password" required autocomplete="current-password" placeholder="••••••••">
+      </div>
+      <button type="submit" class="btn-primary" id="submitBtn">Log In</button>
+    </form>
+
+    <div class="auth-switch">
+      Don't have an account? <a href="register.html">Create one</a>
+    </div>
+  </div>
+</div>
+
+<script src="js/config.js"></script>
+<script>
+const form = document.getElementById("loginForm");
+const msg = document.getElementById("formMsg");
+const submitBtn = document.getElementById("submitBtn");
+
+// if already logged in, go straight to dashboard
+if (localStorage.getItem("token")) {
+  window.location.href = "dashboard.html";
+}
+
+function showMessage(text, type) {
+  msg.textContent = text;
+  msg.className = "form-message show " + type;
+}
+
+form.addEventListener("submit", async (e) => {
+  e.preventDefault();
+  submitBtn.disabled = true;
+  submitBtn.textContent = "Logging in...";
+
+  const email = document.getElementById("email").value.trim();
+  const password = document.getElementById("password").value;
+
+  try {
+    const res = await fetch(`${API_BASE}/login`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ email, password })
+    });
+    const data = await res.json();
+
+    if (data.success) {
+      localStorage.setItem("token", data.token);
+      localStorage.setItem("user", JSON.stringify(data.user));
+      showMessage("Login successful. Redirecting...", "success");
+      setTimeout(() => window.location.href = "dashboard.html", 500);
+    } else {
+      showMessage(data.message || "Login failed", "error");
+      submitBtn.disabled = false;
+      submitBtn.textContent = "Log In";
+    }
+  } catch (err) {
+    showMessage("Could not reach the server. Is the backend running?", "error");
+    submitBtn.disabled = false;
+    submitBtn.textContent = "Log In";
+  }
+});
+</script>
+
+</body>
+</html>

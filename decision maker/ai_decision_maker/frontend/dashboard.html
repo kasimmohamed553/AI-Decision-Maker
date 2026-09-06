@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Dashboard · AI Decision Maker</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+<div class="topbar">
+  <div class="brand-mark" style="margin-bottom:0;">
+    <div class="brand-dot"></div>
+    <span>AI DECISION MAKER</span>
+  </div>
+  <div class="topbar-user">
+    <span class="user-chip" id="userChip"></span>
+    <button class="logout-btn" id="logoutBtn">Log out</button>
+  </div>
+</div>
+
+<main class="dash-main">
+  <div class="dash-header">
+    <h1>Upload your sales data</h1>
+    <p>CSV or Excel file. The engine looks for an <code>Order_Amount</code> column at minimum — add <code>Product</code>, <code>Category</code>, <code>Region</code>, and <code>Order_Date</code> for deeper analysis.</p>
+  </div>
+
+  <div class="upload-zone" id="uploadZone">
+    <svg class="upload-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6">
+      <path d="M12 16V4M12 4L7 9M12 4l5 5" stroke-linecap="round" stroke-linejoin="round"/>
+      <path d="M4 16v3a2 2 0 002 2h12a2 2 0 002-2v-3" stroke-linecap="round" stroke-linejoin="round"/>
+    </svg>
+    <p>Drag & drop a file here, or click to browse</p>
+    <div class="file-name" id="fileName"></div>
+    <input type="file" id="fileInput" accept=".csv,.xlsx,.xls" hidden>
+  </div>
+
+  <div class="upload-actions">
+    <button class="btn-secondary" id="browseBtn">Choose File</button>
+    <button class="btn-analyze" id="analyzeBtn" disabled>Analyze &amp; Decide</button>
+  </div>
+
+  <div class="error-box" id="errorBox"></div>
+
+  <section id="results">
+    <div class="meter-panel">
+      <div class="meter-svg-wrap" id="meterSvg"></div>
+      <div class="meter-info">
+        <div class="verdict-label">Decision</div>
+        <div class="verdict-value" id="verdictValue">—</div>
+        <div class="confidence-text" id="confidenceText"></div>
+        <div class="confidence-bar-track">
+          <div class="confidence-bar-fill" id="confidenceFill" style="width:0%"></div>
+        </div>
+        <p class="recommended-action" id="recommendedAction"></p>
+      </div>
+    </div>
+
+    <div class="grid-2">
+      <div class="card">
+        <h3>Key Stats</h3>
+        <div id="statsList"></div>
+      </div>
+      <div class="card">
+        <h3>Why This Decision</h3>
+        <ul class="reason-list" id="reasonList"></ul>
+      </div>
+    </div>
+
+    <div class="grid-2">
+      <div class="card">
+        <h3>Recommendations</h3>
+        <ul class="tip-list" id="tipList"></ul>
+      </div>
+      <div class="card">
+        <h3>Top Product Breakdown</h3>
+        <div id="productList"></div>
+      </div>
+    </div>
+  </section>
+</main>
+
+<script src="js/config.js"></script>
+<script src="js/script.js"></script>
+</body>
+</html>
